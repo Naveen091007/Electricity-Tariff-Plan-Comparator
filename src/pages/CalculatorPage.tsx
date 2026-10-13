@@ -1,21 +1,21 @@
 import { useState, useMemo } from 'react'
-import ConsumptionForm from './components/ConsumptionForm'
-import BillCard from './components/BillCard'
-import ComparisonChart from './components/ComparisonChart'
-import WhatIfSimulator from './components/WhatIfSimulator'
-import BreakEvenCalc from './components/BreakEvenCalc'
-import RecommendationPanel from './components/RecommendationPanel'
-import Disclaimer from './components/Disclaimer'
-import { TARIFF_PLANS } from './data/tariffs'
-import { calculateAllBills, validateConsumption } from './utils/billing'
-import { formatINR } from './utils/currency'
-import type { ConsumptionInput } from './utils/billing'
+import ConsumptionForm from '../components/ConsumptionForm'
+import BillCard from '../components/BillCard'
+import ComparisonChart from '../components/ComparisonChart'
+import WhatIfSimulator from '../components/WhatIfSimulator'
+import BreakEvenCalc from '../components/BreakEvenCalc'
+import RecommendationPanel from '../components/RecommendationPanel'
+import Disclaimer from '../components/Disclaimer'
+import { TARIFF_PLANS } from '../data/tariffs'
+import { calculateAllBills, validateConsumption } from '../utils/billing'
+import { formatINR } from '../utils/currency'
+import type { ConsumptionInput } from '../utils/billing'
 
 const DEFAULT_CONSUMPTION: ConsumptionInput = { peak: 120, normal: 250, offPeak: 80 }
 
 type Tab = 'compare' | 'whatif' | 'breakeven'
 
-export default function App() {
+export default function CalculatorPage() {
   const [consumption, setConsumption] = useState<ConsumptionInput>(DEFAULT_CONSUMPTION)
   const [tab, setTab] = useState<Tab>('compare')
 
