@@ -1,4 +1,4 @@
-import React from 'react'
+
 import type { ConsumptionInput } from '../utils/billing'
 
 interface Props {

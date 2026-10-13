@@ -1,6 +1,7 @@
-import React from 'react'
+
 import type { BillBreakdown } from '../utils/billing'
 import type { TariffPlan } from '../data/tariffs'
+import { formatINR } from '../utils/currency'
 
 interface Props {
   breakdowns: BillBreakdown[]
@@ -9,7 +10,7 @@ interface Props {
   plans: TariffPlan[]
 }
 
-export default function RecommendationPanel({ breakdowns, cheapestId, savingsVsCheapest, plans }: Props) {
+export default function RecommendationPanel({ breakdowns, cheapestId, plans }: Props) {
   if (!cheapestId) return null
 
   const cheapest = breakdowns.find(b => b.planId === cheapestId)!
@@ -30,11 +31,11 @@ export default function RecommendationPanel({ breakdowns, cheapestId, savingsVsC
           {monthlySaving > 0.01 && (
             <div className="mt-3 grid grid-cols-2 gap-3">
               <div className="bg-white rounded-xl px-4 py-3 text-center shadow-sm">
-                <div className="text-2xl font-bold text-[#2d7d46]">${monthlySaving.toFixed(2)}</div>
+                <div className="text-2xl font-bold text-[#2d7d46]">{formatINR(monthlySaving)}</div>
                 <div className="text-xs text-gray-500">monthly saving</div>
               </div>
               <div className="bg-white rounded-xl px-4 py-3 text-center shadow-sm">
-                <div className="text-2xl font-bold text-[#2d7d46]">${annualSaving.toFixed(2)}</div>
+                <div className="text-2xl font-bold text-[#2d7d46]">{formatINR(annualSaving)}</div>
                 <div className="text-xs text-gray-500">annual saving</div>
               </div>
             </div>
@@ -44,11 +45,11 @@ export default function RecommendationPanel({ breakdowns, cheapestId, savingsVsC
           )}
           <div className="mt-3 text-xs text-gray-500 bg-white/60 rounded-lg px-3 py-2">
             <strong>How we calculated this:</strong>{' '}
-            {cheapest.planName} = ${cheapest.fixedCharge.toFixed(2)} fixed
-            + ${cheapest.peakCost.toFixed(2)} peak
-            + ${cheapest.normalCost.toFixed(2)} normal
-            + ${cheapest.offPeakCost.toFixed(2)} off-peak
-            = <strong>${cheapest.totalBill.toFixed(2)}/month</strong>
+            {cheapest.planName} = {formatINR(cheapest.fixedCharge)} fixed
+            + {formatINR(cheapest.peakCost)} peak
+            + {formatINR(cheapest.normalCost)} normal
+            + {formatINR(cheapest.offPeakCost)} off-peak
+            = <strong>{formatINR(cheapest.totalBill)}/month</strong>
           </div>
         </div>
       </div>

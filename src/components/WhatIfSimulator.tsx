@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
 import { generateWhatIfSeries, findBreakEven } from '../utils/billing'
 import type { TariffPlan } from '../data/tariffs'
 import type { ConsumptionInput } from '../utils/billing'
+import { formatNumberINR } from '../utils/currency'
 
 interface Props {
   plans: TariffPlan[]
@@ -57,8 +58,8 @@ export default function WhatIfSimulator({ plans, consumption }: Props) {
         <LineChart data={series} margin={{top: 4, right: 16, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
           <XAxis dataKey="peak" tick={{fontSize: 11}} label={{value: 'Peak kWh', position: 'insideBottomRight', offset: -4, fontSize: 11}} />
-          <YAxis tickFormatter={v => `$${v}`} tick={{fontSize: 11}} />
-          <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} labelFormatter={v => `Peak: ${v} kWh`} />
+          <YAxis tickFormatter={v => `₹${formatNumberINR(v)}`} tick={{fontSize: 11}} />
+          <Tooltip formatter={(value: number) => `₹${formatNumberINR(value)}`} labelFormatter={v => `Peak: ${v} kWh`} />
           <Legend wrapperStyle={{fontSize: 12}} />
           {plans.map(p => (
             <Line key={p.id} type="monotone" dataKey={p.id} name={p.name} stroke={p.color} strokeWidth={2} dot={false} />

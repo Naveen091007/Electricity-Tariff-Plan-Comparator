@@ -1,15 +1,16 @@
-import React from 'react'
+
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
 import type { BillBreakdown } from '../utils/billing'
+import { formatNumberINR } from '../utils/currency'
 
 interface Props {
   breakdowns: BillBreakdown[]
   cheapestId: string | null
 }
 
-export default function ComparisonChart({ breakdowns, cheapestId }: Props) {
+export default function ComparisonChart({ breakdowns }: Props) {
   const data = breakdowns.map(b => ({
     name: b.planName,
     'Fixed Charge': parseFloat(b.fixedCharge.toFixed(2)),
@@ -27,8 +28,8 @@ export default function ComparisonChart({ breakdowns, cheapestId }: Props) {
         <BarChart data={data} margin={{top: 4, right: 16, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
           <XAxis dataKey="name" tick={{fontSize: 12}} />
-          <YAxis tickFormatter={v => `$${v}`} tick={{fontSize: 12}} />
-          <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+          <YAxis tickFormatter={v => `₹${formatNumberINR(v)}`} tick={{fontSize: 12}} />
+          <Tooltip formatter={(value: number) => `₹${formatNumberINR(value)}`} />
           <Legend wrapperStyle={{fontSize: 12}} />
           <Bar dataKey="Fixed Charge"    stackId="a" fill="#94a3b8" />
           <Bar dataKey="Peak Energy"     stackId="a" fill="#f87171" />

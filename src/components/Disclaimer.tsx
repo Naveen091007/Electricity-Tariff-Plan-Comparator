@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { DISCLAIMER } from '../data/tariffs'
 
 export default function Disclaimer() {

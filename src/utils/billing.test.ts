@@ -8,24 +8,24 @@ import {
 } from './billing'
 import { TARIFF_PLANS } from '../data/tariffs'
 
-const [basic, tou, economy] = TARIFF_PLANS
+const [basic, tou] = TARIFF_PLANS
 
 describe('calculateBill', () => {
   it('calculates basic flat rate bill correctly', () => {
     const b = calculateBill(basic, { peak: 100, normal: 200, offPeak: 50 })
-    expect(b.totalBill).toBeCloseTo(71, 5)
-    expect(b.fixedCharge).toBe(8)
-    expect(b.peakCost).toBeCloseTo(18, 5)
+    expect(b.totalBill).toBeCloseTo(2640, 5)
+    expect(b.fixedCharge).toBe(120)
+    expect(b.peakCost).toBeCloseTo(720, 5)
   })
 
   it('calculates TOU bill correctly', () => {
     const b = calculateBill(tou, { peak: 100, normal: 200, offPeak: 50 })
-    expect(b.totalBill).toBeCloseTo(76.5, 5)
+    expect(b.totalBill).toBeCloseTo(2675, 5)
   })
 
   it('handles zero consumption', () => {
     const b = calculateBill(basic, { peak: 0, normal: 0, offPeak: 0 })
-    expect(b.totalBill).toBeCloseTo(8, 5)
+    expect(b.totalBill).toBeCloseTo(120, 5)
     expect(b.totalEnergyCost).toBe(0)
   })
 })
@@ -41,8 +41,8 @@ describe('calculateAllBills', () => {
       peak: 0, normal: 0, offPeak: 0,
     })
     expect(savingsVsCheapest[cheapestId!]).toBe(0)
-    expect(savingsVsCheapest['tou']).toBeCloseTo(2, 5)
-    expect(savingsVsCheapest['economy']).toBeCloseTo(4, 5)
+    expect(savingsVsCheapest['tou']).toBeCloseTo(30, 5)
+    expect(savingsVsCheapest['economy']).toBeCloseTo(60, 5)
   })
 
   it('switches cheapest plan with high off-peak usage', () => {

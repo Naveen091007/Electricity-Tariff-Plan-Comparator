@@ -87,10 +87,10 @@ export function generateWhatIfSeries(
   maxPeak = 400,
   steps = 40
 ): { peak: number; [planId: string]: number }[] {
-  const result = []
+  const result: { peak: number; [planId: string]: number }[] = []
   for (let i = 0; i <= steps; i++) {
     const peak = parseFloat(((i / steps) * maxPeak).toFixed(1))
-    const row: Record<string, number> = { peak }
+    const row: { peak: number; [planId: string]: number } = { peak }
     for (const plan of plans) {
       const b = calculateBill(plan, { peak, normal, offPeak })
       row[plan.id] = parseFloat(b.totalBill.toFixed(2))

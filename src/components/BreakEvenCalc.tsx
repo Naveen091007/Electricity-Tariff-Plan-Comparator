@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { findBreakEven } from '../utils/billing'
 import type { TariffPlan } from '../data/tariffs'
 import type { ConsumptionInput } from '../utils/billing'

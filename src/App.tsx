@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import ConsumptionForm from './components/ConsumptionForm'
 import BillCard from './components/BillCard'
 import ComparisonChart from './components/ComparisonChart'
@@ -8,6 +8,7 @@ import RecommendationPanel from './components/RecommendationPanel'
 import Disclaimer from './components/Disclaimer'
 import { TARIFF_PLANS } from './data/tariffs'
 import { calculateAllBills, validateConsumption } from './utils/billing'
+import { formatINR } from './utils/currency'
 import type { ConsumptionInput } from './utils/billing'
 
 const DEFAULT_CONSUMPTION: ConsumptionInput = { peak: 120, normal: 250, offPeak: 80 }
@@ -69,12 +70,12 @@ export default function App() {
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-2 h-2 rounded-full" style={{background: p.color}} />
                       <span className="font-semibold text-gray-700">{p.name}</span>
-                      <span className="text-gray-400 ml-auto">${p.fixedCharge.toFixed(2)}/mo fixed</span>
+                      <span className="text-gray-400 ml-auto">{formatINR(p.fixedCharge)}/mo fixed</span>
                     </div>
                     <div className="grid grid-cols-3 gap-1 pl-4 text-gray-500">
-                      <span>Peak: ${p.peakRate}</span>
-                      <span>Normal: ${p.normalRate}</span>
-                      <span>Off-peak: ${p.offPeakRate}</span>
+                      <span>Peak: {formatINR(p.peakRate)}</span>
+                      <span>Normal: {formatINR(p.normalRate)}</span>
+                      <span>Off-peak: {formatINR(p.offPeakRate)}</span>
                     </div>
                   </div>
                 ))}
