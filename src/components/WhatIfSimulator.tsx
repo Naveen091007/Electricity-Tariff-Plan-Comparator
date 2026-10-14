@@ -2,10 +2,10 @@ import { useState, useMemo } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { generateWhatIfSeries, findBreakEven } from '../utils/billing'
+import { generateWhatIfSeries, findBreakEven, calculateBill } from '../utils/billing'
 import type { TariffPlan } from '../data/tariffs'
 import type { ConsumptionInput } from '../utils/billing'
-import { formatNumberINR } from '../utils/currency'
+import { formatNumberINR, formatINR } from '../utils/currency'
 
 interface Props {
   plans: TariffPlan[]
@@ -14,24 +14,51 @@ interface Props {
 
 export default function WhatIfSimulator({ plans, consumption }: Props) {
   const [maxPeak, setMaxPeak] = useState(400)
+  const [peakShiftPct, setPeakShiftPct] = useState(0)   // 0–50, step 5
+  const [scalePct, setScalePct]         = useState(100)  // 70/90/100/110/120
+
+  const effectiveConsumption = useMemo((): ConsumptionInput => {
+    const shifted = {
+      peak: consumption.peak * (1 - peakShiftPct / 100),
+      normal: consumption.normal,
+      offPeak: consumption.offPeak + consumption.peak * (peakShiftPct / 100),
+    }
+    return {
+      peak: shifted.peak * (scalePct / 100),
+      normal: shifted.normal * (scalePct / 100),
+      offPeak: shifted.offPeak * (scalePct / 100),
+    }
+  }, [consumption, peakShiftPct, scalePct])
 
   const series = useMemo(
-    () => generateWhatIfSeries(plans, consumption.normal, consumption.offPeak, maxPeak, 50),
-    [plans, consumption.normal, consumption.offPeak, maxPeak]
+    () => generateWhatIfSeries(plans, effectiveConsumption.normal, effectiveConsumption.offPeak, maxPeak, 50),
+    [plans, effectiveConsumption.normal, effectiveConsumption.offPeak, maxPeak]
   )
 
   const breakEvens = useMemo(() => {
     const results: { labelA: string; labelB: string; x: number }[] = []
     for (let i = 0; i < plans.length; i++) {
       for (let j = i + 1; j < plans.length; j++) {
-        const x = findBreakEven(plans[i], plans[j], consumption.normal, consumption.offPeak)
+        const x = findBreakEven(plans[i], plans[j], effectiveConsumption.normal, effectiveConsumption.offPeak)
         if (x !== null && x <= maxPeak) {
           results.push({ labelA: plans[i].name, labelB: plans[j].name, x })
         }
       }
     }
     return results
-  }, [plans, consumption.normal, consumption.offPeak, maxPeak])
+  }, [plans, effectiveConsumption.normal, effectiveConsumption.offPeak, maxPeak])
+
+  const originalCheapestBill = useMemo(() => {
+    if (plans.length === 0) return 0
+    return Math.min(...plans.map(p => calculateBill(p, consumption).totalBill))
+  }, [plans, consumption])
+
+  const simulatedCheapestBill = useMemo(() => {
+    if (plans.length === 0) return 0
+    return Math.min(...plans.map(p => calculateBill(p, effectiveConsumption).totalBill))
+  }, [plans, effectiveConsumption])
+
+  const quickButtons: [string, number][] = [['−30%', 70], ['−10%', 90], ['Original', 100], ['+10%', 110], ['+20%', 120]]
 
   return (
     <div>
@@ -54,6 +81,69 @@ export default function WhatIfSimulator({ plans, consumption }: Props) {
           kWh
         </label>
       </div>
+
+      {/* Peak shift slider */}
+      <div className="mb-4">
+        <label className="block text-sm text-gray-600 mb-1">
+          Shift % of peak to off-peak: <strong>{peakShiftPct}%</strong>
+        </label>
+        <input
+          type="range"
+          min={0}
+          max={50}
+          step={5}
+          value={peakShiftPct}
+          onChange={e => setPeakShiftPct(parseInt(e.target.value))}
+          className="w-full accent-[#2d7d46]"
+          aria-label="Peak shift percentage"
+        />
+        <div className="flex justify-between text-xs text-gray-400 mt-0.5">
+          <span>0%</span><span>25%</span><span>50%</span>
+        </div>
+      </div>
+
+      {/* Quick adjust buttons */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {quickButtons.map(([label, val]) => (
+          <button
+            key={val}
+            onClick={() => setScalePct(val)}
+            className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+              scalePct === val
+                ? 'bg-[#2d7d46] text-white border-[#2d7d46]'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-[#2d7d46]'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Before/after summary box */}
+      {(peakShiftPct > 0 || scalePct !== 100) && (
+        <div className="grid grid-cols-3 gap-3 mb-4 bg-gray-50 rounded-xl p-4 text-center text-sm">
+          <div>
+            <div className="text-xs text-gray-500 mb-0.5">Original cheapest</div>
+            <div className="font-bold text-[#0f2744]">{formatINR(originalCheapestBill)}</div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-500 mb-0.5">Simulated cheapest</div>
+            <div className="font-bold text-[#0f2744]">{formatINR(simulatedCheapestBill)}</div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-500 mb-0.5">Monthly saving</div>
+            <div
+              className={`font-bold ${
+                originalCheapestBill - simulatedCheapestBill > 0 ? 'text-[#2d7d46]' : 'text-red-500'
+              }`}
+            >
+              {formatINR(Math.abs(originalCheapestBill - simulatedCheapestBill))}
+              {originalCheapestBill - simulatedCheapestBill >= 0 ? ' ↓' : ' ↑'}
+            </div>
+          </div>
+        </div>
+      )}
+
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={series} margin={{top: 4, right: 16, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />

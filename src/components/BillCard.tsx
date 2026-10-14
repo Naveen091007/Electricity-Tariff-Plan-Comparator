@@ -18,11 +18,12 @@ export default function BillCard({ breakdown: b, isCheapest, savings }: Props) {
 
   return (
     <div
-      className={`relative rounded-2xl border p-5 transition-shadow ${
+      className={`relative rounded-2xl border border-t-4 p-5 transition-shadow ${
         isCheapest
           ? 'border-[#2d7d46] shadow-md bg-[#e8f5ee]'
           : 'border-gray-100 shadow-sm bg-white'
       }`}
+      style={{ borderTopColor: b.color }}
     >
       {isCheapest && (
         <span className="absolute -top-3 left-4 bg-[#2d7d46] text-white text-xs font-bold px-3 py-0.5 rounded-full shadow">
@@ -47,6 +48,10 @@ export default function BillCard({ breakdown: b, isCheapest, savings }: Props) {
         <div className="border-t border-gray-200 pt-1.5 flex justify-between font-semibold text-[#0f2744]">
           <span>Total</span>
           <span>{formatINR(b.totalBill)}</span>
+        </div>
+        <div className="flex justify-between text-gray-400 mt-1">
+          <span>Annual estimate</span>
+          <span>{formatINR(b.totalBill * 12)}/year</span>
         </div>
       </div>
       {savings > 0 && (

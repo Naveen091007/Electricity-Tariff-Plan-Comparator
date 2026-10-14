@@ -26,12 +26,13 @@ export default function ConsumptionForm({ value, onChange, errors }: Props) {
       <div className="grid grid-cols-1 gap-4">
         {FIELDS.map(({ key, label, hint, color }) => (
           <div key={key}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={key} className="block text-sm font-medium text-gray-700 mb-1">
               <span className={`font-semibold ${color}`}>{label}</span>
               <span className="font-normal text-gray-400 ml-2">({hint})</span>
             </label>
             <div className="relative">
               <input
+                id={key}
                 type="number"
                 min="0"
                 step="1"
@@ -45,7 +46,7 @@ export default function ConsumptionForm({ value, onChange, errors }: Props) {
               <span className="absolute right-3 top-2.5 text-xs text-gray-400">kWh</span>
             </div>
             {errors[key] && (
-              <p className="mt-1 text-xs text-red-500">{errors[key]}</p>
+              <p role="alert" className="mt-1 text-xs text-red-500">{errors[key]}</p>
             )}
           </div>
         ))}
@@ -55,6 +56,24 @@ export default function ConsumptionForm({ value, onChange, errors }: Props) {
         {isNaN(value.peak) || isNaN(value.normal) || isNaN(value.offPeak)
           ? '—'
           : `${(value.peak + value.normal + value.offPeak).toFixed(0)} kWh / month`}
+      </div>
+      <div className="mt-3 flex gap-2">
+        <button
+          type="button"
+          aria-label="Load demo consumption values"
+          onClick={() => onChange({ peak: 180, normal: 300, offPeak: 120 })}
+          className="flex-1 text-xs py-1.5 px-3 rounded-lg bg-[#e8f5ee] text-[#2d7d46] font-medium hover:bg-[#d1fae5] transition-colors"
+        >
+          Load Demo
+        </button>
+        <button
+          type="button"
+          aria-label="Reset all consumption values to zero"
+          onClick={() => onChange({ peak: 0, normal: 0, offPeak: 0 })}
+          className="flex-1 text-xs py-1.5 px-3 rounded-lg bg-gray-100 text-gray-600 font-medium hover:bg-gray-200 transition-colors"
+        >
+          Reset
+        </button>
       </div>
     </div>
   )
