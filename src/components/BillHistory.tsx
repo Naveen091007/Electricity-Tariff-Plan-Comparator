@@ -93,7 +93,7 @@ export default function BillHistory({ breakdowns, consumption }: Props) {
             <LineChart data={chartData} margin={{ top: 4, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tickFormatter={v => `₹${v}`} tick={{ fontSize: 11 }} />
+              <YAxis tickFormatter={v => formatINR(v as number)} tick={{ fontSize: 11 }} width={80} />
               <Tooltip formatter={(value: number) => formatINR(value)} labelFormatter={v => `Month: ${v}`} />
               <Line type="monotone" dataKey="bill" name="Cheapest Bill" stroke="#2d7d46" strokeWidth={2} dot />
             </LineChart>

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-upgrade-wattwise",
+  "task_description": "Upgrade WattWise from a functional prototype to a polished, college-demo-ready SaaS-quality app. Nine phases: premium landing page redesign, dashboard upgrade, bill history feature, smart savings action center, enhanced what-if simulator, PDF report improvements, demo controls, accessibility polish, and full build/test verification.",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004"],
+  "blocked_reason": null
+}

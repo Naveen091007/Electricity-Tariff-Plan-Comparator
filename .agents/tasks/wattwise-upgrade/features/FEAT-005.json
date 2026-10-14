@@ -1,0 +1,29 @@
+{
+  "id": "FEAT-005",
+  "type": "feat",
+  "description": "Add budget tracker component to compare estimated monthly bill with user's electricity budget",
+  "status": "pending",
+  "steps": [
+    "Create src/components/BudgetTracker.tsx with: budget input field in ₹, progress bar comparing budget vs estimated monthly bill (cheapest plan), color-coded indicators (green < 80%, amber 80–100%, red > 100%), reset/update buttons",
+    "Integrate with localStorage: key 'wattwise_budget' to persist budget value",
+    "Add BudgetTracker to CalculatorPage (App.tsx) in appropriate location",
+    "Use formatINR for all currency displays in component",
+    "Ensure component is responsive and matches design system"
+  ],
+  "acceptance_criteria": [
+    "Users can set and update electricity budget in ₹",
+    "Progress bar shows budget vs estimated bill comparison",
+    "Color coding works correctly based on percentage",
+    "Budget persists across page reloads",
+    "Component integrates smoothly with existing calculator UI"
+  ],
+  "verification": [
+    "Set budget and verify it saves to localStorage",
+    "Test progress bar updates with consumption changes",
+    "Verify color coding at different percentages",
+    "Refresh page and confirm budget persists",
+    "Test mobile responsive layout"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

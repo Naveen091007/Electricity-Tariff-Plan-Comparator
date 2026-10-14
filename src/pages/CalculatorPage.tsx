@@ -154,9 +154,9 @@ export default function CalculatorPage() {
                       <span className="text-gray-400 ml-auto whitespace-nowrap">{formatINR(p.fixedCharge)}/mo fixed</span>
                     </div>
                     <div className="grid grid-cols-3 gap-1 pl-4 text-gray-500">
-                      <span>Peak: ₹{p.peakRate}</span>
-                      <span>Normal: ₹{p.normalRate}</span>
-                      <span>Off: ₹{p.offPeakRate}</span>
+                      <span>Peak: {formatINR(p.peakRate)}</span>
+                      <span>Normal: {formatINR(p.normalRate)}</span>
+                      <span>Off: {formatINR(p.offPeakRate)}</span>
                     </div>
                   </div>
                 ))}
@@ -181,7 +181,6 @@ export default function CalculatorPage() {
                 <RecommendationPanel
                   breakdowns={breakdowns}
                   cheapestId={cheapestId}
-                  savingsVsCheapest={savingsVsCheapest}
                   plans={TARIFF_PLANS}
                   consumption={consumption}
                 />

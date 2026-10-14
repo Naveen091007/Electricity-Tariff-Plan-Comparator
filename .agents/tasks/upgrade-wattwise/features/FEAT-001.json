@@ -1,0 +1,27 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Premium Landing Page Redesign + CSS/index.css global polish. Rewrite LandingPage.tsx with a SaaS-quality design: gradient hero, inline-CSS mini chart, updated feature cards, improved How It Works, Benefits, FAQ accordion with CSS height animation, 4-column footer, and hamburger close-on-nav-click. Update index.css with smooth-scroll, shimmer keyframe, prefers-reduced-motion, overflow-x fix. Independent of FEAT-002/003/004.",
+  "status": "pending",
+  "steps": [
+    "1. Update src/index.css: add `html { scroll-behavior: smooth; }`, `body { overflow-x: hidden; }`, `@keyframes shimmer` gradient animation for hero, `@media (prefers-reduced-motion: reduce)` block that disables all transitions/animations.",
+    "2. Rewrite src/pages/LandingPage.tsx fully. Key requirements: (a) sticky header bg-[#0f2744] with Logo, nav links (href=#features, #how-it-works, #benefits, #faq), Link to /calculator 'Calculate My Bill' button, Link to /appliances; hamburger with state toggle, mobile menu closes when any nav link/button is clicked; (b) Hero section: bg-gradient-to-br from-[#0f2744] via-[#1e3a5f] to-[#0f2744], headline 'Your Electricity Bill, Smarter.', subtext, two CTAs (Link to /calculator + href=#features), dashboard preview card using formatINR(1875), formatINR(320), inline CSS bar chart divs (no Recharts) clearly labelled 'Sample Preview'; (c) Features section id='features': 6 cards in grid (Smart Tariff Comparison, Appliance Energy Detective, Smart Savings Simulator, Monthly Budget Guardian, Bill History, PDF Savings Report), white bg, rounded-2xl, border, hover:shadow-md, icon in colored circle, title, description; (d) How It Works id='how-it-works': 3 numbered circles with dashed connector line on desktop, steps: Enter Consumption / Compare Plans / Discover Savings; (e) Benefits id='benefits': 2-col grid with green checkmarks for 5 items (Transparent calculation, Compare tariff structures, Identify high-consumption appliances, Set and track monthly budget, Download full savings report); (f) FAQ id='faq': accordion with 5 items using CSS max-height transition (not conditional rendering), questions matching existing content; (g) CTA section; (h) Footer: 4-column grid (Logo+tagline | Quick Links | Features | Disclaimer), copyright using new Date().getFullYear(). All imports: useState from react, Link from react-router-dom, formatINR from ../utils/currency, Logo from ../components/Logo. No Recharts. No unused imports."
+  ],
+  "acceptance_criteria": [
+    "LandingPage renders without TypeScript errors",
+    "Hero gradient uses bg-gradient-to-br from-[#0f2744] via-[#1e3a5f] to-[#0f2744]",
+    "Mini chart uses inline CSS only (no Recharts import)",
+    "FAQ accordion animates via CSS max-height (not conditional rendering)",
+    "Mobile hamburger menu closes when any nav link is clicked",
+    "Footer shows current year via new Date().getFullYear()",
+    "index.css has smooth-scroll, overflow-x hidden, shimmer keyframe, and prefers-reduced-motion block",
+    "`npm test` still passes all 14 tests",
+    "`npx tsc --noEmit` reports zero errors"
+  ],
+  "verification": [
+    "cd 'c:\\Users\\NAVEEN S\\Desktop\\electicity tariff'; npm test",
+    "cd 'c:\\Users\\NAVEEN S\\Desktop\\electicity tariff'; npx tsc --noEmit"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

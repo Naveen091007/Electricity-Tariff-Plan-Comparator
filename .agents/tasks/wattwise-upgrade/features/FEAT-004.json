@@ -1,0 +1,31 @@
+{
+  "id": "FEAT-004",
+  "type": "feat",
+  "description": "Upgrade existing WhatIfSimulator.tsx with peak-to-off-peak shift slider and side-by-side comparison",
+  "status": "pending",
+  "steps": [
+    "Modify src/components/WhatIfSimulator.tsx to add: slider (0-100%) for shifting peak usage to off-peak",
+    "Add side-by-side comparison: original vs simulated bills for all 3 plans",
+    "Show monthly/annual savings from the shift in INR using formatINR",
+    "Implement conservation logic: simPeak = peak * (1 - shift/100), simOffPeak = offPeak + peak * (shift/100)",
+    "Add before/after bar chart visualization",
+    "Update tooltips and labels to use INR formatting",
+    "Ensure total kWh is conserved in calculations"
+  ],
+  "acceptance_criteria": [
+    "Slider adjusts from 0% to 100% peak shift",
+    "Simulated bills update in real-time as slider moves",
+    "Savings calculations show correct INR values",
+    "Total kWh remains constant (energy conservation)",
+    "Before/after visualization is clear and informative"
+  ],
+  "verification": [
+    "Test slider interaction - verify bills update",
+    "Check that 0% shift shows original values",
+    "Verify 100% shift moves all peak to off-peak",
+    "Test conservation: original total kWh = simulated total kWh",
+    "Run existing tests to ensure no regressions"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

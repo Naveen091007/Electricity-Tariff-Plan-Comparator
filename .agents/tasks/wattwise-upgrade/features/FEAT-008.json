@@ -1,0 +1,31 @@
+{
+  "id": "FEAT-008",
+  "type": "feat",
+  "description": "Complete routing setup with all pages and navigation polish",
+  "status": "pending",
+  "steps": [
+    "Update src/Router.tsx to include all routes: / (landing), /calculator (main), /appliances (calculator), /reports (future placeholder)",
+    "Ensure active route highlighting in navigation menus",
+    "Add 404/not found page for invalid routes",
+    "Update all navigation links to use react-router-dom Link component",
+    "Add consistent header/navigation across all pages",
+    "Implement smooth scrolling for landing page anchor links",
+    "Test all navigation paths work correctly"
+  ],
+  "acceptance_criteria": [
+    "All routes work correctly: /, /calculator, /appliances",
+    "Active navigation items are visually highlighted",
+    "Navigation is consistent across all pages",
+    "Invalid routes show 404 page",
+    "Smooth scrolling works for landing page sections"
+  ],
+  "verification": [
+    "Test navigation between all pages",
+    "Verify active route highlighting",
+    "Test invalid URL shows 404",
+    "Check smooth scrolling on landing page",
+    "Test mobile navigation on all pages"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

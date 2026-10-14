@@ -1,0 +1,27 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Convert entire application from USD to Indian Rupees (₹) including tariff rates, components, and tests",
+  "status": "pending",
+  "steps": [
+    "Create src/utils/currency.ts with formatINR(amount: number): string using Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }) and parseINR(str: string): number helper",
+    "Update src/data/tariffs.ts: convert demo rates to INR scale (Basic Flat: fixedCharge=120, rates=7.20; TOU: fixedCharge=150, peakRate=10.50, normalRate=6.50, offPeakRate=3.50; Economy Night: fixedCharge=180, peakRate=8.50, normalRate=5.80, offPeakRate=2.80). Add 'isDemo: true' to TariffPlan interface.",
+    "Update all components to use formatINR(): BillCard.tsx, ComparisonChart.tsx, WhatIfSimulator.tsx, BreakEvenCalc.tsx, RecommendationPanel.tsx, App.tsx",
+    "Update billing.test.ts: recalculate expected values for new INR tariff rates. Test basic plan: totalBill = 120 + 100*7.20 + 200*7.20 + 50*7.20 = 2640. Test TOU: 150 + 100*10.50 + 200*6.50 + 50*3.50 = 2675. Test savings: zero consumption: tou-basic=30, economy-basic=60.",
+    "Update DISCLAIMER text in tariffs.ts to mention INR demonstration rates"
+  ],
+  "acceptance_criteria": [
+    "All currency displays show ₹ symbol instead of $",
+    "Tariff rates are reasonable INR values (not simple $→₹ conversion)",
+    "All unit tests pass with updated expected INR values",
+    "Application builds without TypeScript errors",
+    "All calculations maintain same relative proportions"
+  ],
+  "verification": [
+    "Run `npm test` - all 14 tests must pass",
+    "Run `npm run build` - build must succeed",
+    "Run `npm run dev` and verify ₹ symbols appear in UI"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

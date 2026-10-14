@@ -1,0 +1,30 @@
+{
+  "id": "FEAT-006",
+  "type": "feat",
+  "description": "Add bill forecasting component using historical data to predict future electricity costs",
+  "status": "pending",
+  "steps": [
+    "Create src/components/BillForecast.tsx with: input for up to 6 previous monthly bills in ₹, line chart showing historical bars + forecast line, forecast calculation: 3-month rolling average of last 3 entries, clear disclaimer label: 'Estimate only - actual bills may vary'",
+    "Integrate with localStorage: key 'wattwise_history' to persist bill history",
+    "Use Recharts for visualization (line chart + bar chart combination)",
+    "Add BillForecast to CalculatorPage (App.tsx) or as a separate tab",
+    "Ensure all currency values use formatINR",
+    "Add validation for bill input (positive numbers, reasonable ranges)"
+  ],
+  "acceptance_criteria": [
+    "Users can enter historical bill amounts in ₹",
+    "Forecast shows as line extending beyond historical data",
+    "3-month rolling average calculation is correct",
+    "Chart visualization is clear and informative",
+    "Historical data persists across sessions"
+  ],
+  "verification": [
+    "Enter test historical data (e.g., [1000, 1200, 1100, 1300])",
+    "Verify forecast calculation matches manual 3-month average",
+    "Test chart renders correctly with both bars and line",
+    "Refresh page and confirm data persistence",
+    "Validate input rejects negative or invalid values"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

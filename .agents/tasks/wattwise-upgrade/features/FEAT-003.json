@@ -1,0 +1,30 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Add Appliance Calculator page to estimate energy consumption and costs for common household appliances",
+  "status": "pending",
+  "steps": [
+    "Create src/utils/applianceCalculator.ts with: preset appliances array (AC 1500W, Fan 75W, Refrigerator 200W, Washing Machine 500W, LED Light 10W, TV 100W), calculateMonthlyKWh function: (wattage * quantity * hoursPerDay * daysPerMonth) / 1000, and ApplianceItem interface",
+    "Create src/pages/ApplianceCalculator.tsx with: add appliance form (preset or custom wattage), quantity/hours/days inputs, per-appliance kWh and cost display (using Basic Flat normalRate = 7.20/kWh), bar chart of top consumers, energy-saving tips section",
+    "Add Appliance Calculator route to src/Router.tsx: /appliances",
+    "Create localStorage integration for appliance data: key 'wattwise_appliances'",
+    "Add navigation link to Appliance Calculator in landing page header and calculator page",
+    "Style matches application theme with consistent cards and layout"
+  ],
+  "acceptance_criteria": [
+    "Users can add, edit, and remove appliances",
+    "Calculations show accurate kWh and INR costs",
+    "Bar chart visualizes top energy-consuming appliances",
+    "Data persists across page reloads via localStorage",
+    "Page is accessible from main navigation"
+  ],
+  "verification": [
+    "Navigate to /appliances and add test appliances",
+    "Verify calculations match manual computation",
+    "Refresh page and verify data persists",
+    "Test responsive layout on mobile",
+    "Check TypeScript compilation passes"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

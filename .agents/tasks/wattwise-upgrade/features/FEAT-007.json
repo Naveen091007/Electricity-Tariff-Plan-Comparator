@@ -1,0 +1,31 @@
+{
+  "id": "FEAT-007",
+  "type": "feat",
+  "description": "Add PDF report generation for saving tariff comparison and consumption analysis",
+  "status": "pending",
+  "steps": [
+    "Install dependencies: `npm install jspdf@2.5.1 html2canvas@1.4.1`",
+    "Create src/utils/pdfReport.ts with generatePDFReport(data) function",
+    "Report includes: WattWise header/logo, consumption summary, tariff comparison table (all 3 plans in INR), recommended plan with savings, appliances summary (if available), energy-saving tips",
+    "All monetary values use formatINR in PDF",
+    "Add 'Download Report' button to CalculatorPage (App.tsx)",
+    "Style PDF with professional formatting matching WattWise branding",
+    "Ensure PDF generation works without CORS issues"
+  ],
+  "acceptance_criteria": [
+    "PDF generation button is functional",
+    "Report includes all key information from calculator",
+    "PDF uses INR formatting throughout",
+    "Report is well-formatted and readable",
+    "Generation works without errors in browser"
+  ],
+  "verification": [
+    "Click download button and verify PDF generates",
+    "Open PDF and check formatting and content",
+    "Verify INR symbols and formatting in PDF",
+    "Test with different consumption scenarios",
+    "Ensure no console errors during generation"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

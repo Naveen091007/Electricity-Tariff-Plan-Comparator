@@ -7,7 +7,6 @@ import { formatINR } from '../utils/currency'
 interface Props {
   breakdowns: BillBreakdown[]
   cheapestId: string | null
-  savingsVsCheapest: Record<string, number>
   plans: TariffPlan[]
   consumption: ConsumptionInput
 }

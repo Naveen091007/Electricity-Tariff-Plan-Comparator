@@ -1,0 +1,31 @@
+{
+  "id": "FEAT-009",
+  "type": "feat",
+  "description": "Create unified localStorage utilities and integrate across all features",
+  "status": "pending",
+  "steps": [
+    "Create src/utils/storage.ts with typed get/set/remove helpers",
+    "Define storage keys: wattwise_appliances (ApplianceItem[]), wattwise_budget (number), wattwise_history (number[]), wattwise_consumption (ConsumptionInput)",
+    "Implement safe defaults and try/catch around all JSON operations",
+    "Update CalculatorPage to load saved consumption on mount",
+    "Integrate storage utilities into all components that use localStorage",
+    "Add clear/reset functionality where appropriate",
+    "Test edge cases: corrupted data, missing keys, storage limits"
+  ],
+  "acceptance_criteria": [
+    "All localStorage operations use unified utilities",
+    "Data persists correctly across all features",
+    "Safe defaults work for missing or corrupted data",
+    "No console errors during storage operations",
+    "Clear/reset functions work as expected"
+  ],
+  "verification": [
+    "Test persistence across page reloads for all data types",
+    "Verify safe defaults with corrupted localStorage data",
+    "Test clear/reset functionality",
+    "Check no TypeScript errors in storage utilities",
+    "Test in incognito/private mode (no storage available)"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

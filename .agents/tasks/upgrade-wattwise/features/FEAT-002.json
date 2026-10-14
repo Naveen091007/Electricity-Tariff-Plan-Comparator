@@ -1,0 +1,47 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Dashboard upgrade: new storage functions + new components (BillHistory, SavingsActionCenter, DemoControls) + upgrades to ConsumptionForm, RecommendationPanel, BillCard, WhatIfSimulator + integration into CalculatorPage. Depends on nothing in FEAT-001 (both are independent). This is the largest feature.",
+  "status": "pending",
+  "steps": [
+    "1. Add to src/utils/storage.ts: (a) BILL_HISTORY key to KEYS constant ('wattwise_bill_history'); (b) BillHistoryEntry interface: { month: string; consumption: { peak: number; normal: number; offPeak: number }; bills: Record<string, number>; cheapestPlanId: string }; (c) loadBillHistory(): BillHistoryEntry[]; (d) saveBillHistory(entries): void (max 12); (e) addBillHistoryEntry(entry): BillHistoryEntry[]; (f) loadDemoData(): void — sets consumption to {peak:180,normal:300,offPeak:120}, budget to 3000, adds 3 sample history entries for past 3 months with realistic bill values (basic~3894, tou~3885, economy~3666 based on 180/300/120 kWh). Do NOT rename or remove existing functions.",
+
+    "2. Upgrade src/components/ConsumptionForm.tsx: add 'Load Demo Scenario' button (sets peak=180, normal=300, offPeak=120 via onChange prop) and 'Reset' button (sets all to 0). Show total kWh prominently in a styled div. Keep color-coded period labels (red=peak, yellow=normal, blue=off-peak). Props interface unchanged: { value, onChange, errors }. Add aria-labels to buttons.",
+
+    "3. Upgrade src/components/BillCard.tsx: (a) add a 4px top border matching plan color using style={{borderTop: `4px solid ${b.color}`}}; (b) add annual cost line: formatINR(b.totalBill * 12) + '/year' in text-xs text-gray-400 below the monthly amount; (c) add aria-label to the card div. Keep all existing logic.",
+
+    "4. Upgrade src/components/RecommendationPanel.tsx: add a 'Smart Savings Actions' subsection below the existing content. Rules: (a) if consumption.peak > 100 — show 'Shift 20% of peak usage to off-peak' with calculated saving: call calculateBill on cheapest plan with adjusted consumption (adjustedPeak = peak*0.8, adjustedOffPeak = offPeak + peak*0.2, normal unchanged) to get newBill, saving = cheapestBill - newBill, show if > 0; (b) always show 'Switch to cheapest plan' action using savings from savingsVsCheapest of the most expensive plan. Add onTryScenario prop: (newConsumption: ConsumptionInput) => void (optional, default no-op). The 'Try This Scenario' button calls onTryScenario with the adjusted values. Import ConsumptionInput from billing.ts and calculateBill from billing.ts. Add consumption: ConsumptionInput to Props.",
+
+    "5. Upgrade src/components/WhatIfSimulator.tsx: (a) add Peak Shift slider (0–50%, step 5%) — state: peakShiftPct, recalculates adjustedPeak = consumption.peak*(1-peakShiftPct/100), adjustedOffPeak = consumption.offPeak + consumption.peak*(peakShiftPct/100), passes adjusted values to generateWhatIfSeries; (b) add Consumption Change quick buttons (±10%, ±20%, ±30%) — state: consumptionScale (default 1.0), scales all three values proportionally for the chart; (c) show before/after summary: Original bill on cheapest plan (using real consumption) vs Simulated bill (using adjusted+scaled), monthly saving in green if positive. Use calculateAllBills from billing.ts. Keep existing maxPeak control and line chart.",
+
+    "6. Create src/components/BillHistory.tsx: interface BillHistoryEntry imported from storage.ts. Features: (a) 'Save This Month' button — reads current consumption + breakdowns from props, calls addBillHistoryEntry, updates local state; (b) table showing month (formatted 'Mon YY'), total kWh, cheapest plan name, cheapest bill amount with formatINR; (c) Recharts LineChart showing cheapest bill over time (x=month label, y=bill amount); (d) month-over-month change indicator (green arrow down if cheaper, red arrow up if more expensive, with amount); (e) 'Clear History' button with confirmation; (f) empty state with helpful message; (g) localStorage note 'Your data is stored only in this browser'. Props: { consumption: ConsumptionInput; breakdowns: BillBreakdown[]; cheapestId: string | null }.",
+
+    "7. Create src/components/SavingsActionCenter.tsx: rule-based savings cards. Props: { consumption: ConsumptionInput; breakdowns: BillBreakdown[]; cheapestId: string | null; onTryScenario: (c: ConsumptionInput) => void }. Three rule cards: (a) Peak Shift — if peak > 100: adjustedPeak=peak*0.8, adjustedOffPeak=offPeak+peak*0.2, calculate saving on cheapest plan using calculateBill, show action/why/saving/Try This Scenario button; (b) Plan Switch — find most expensive plan, show monthly+annual savings vs cheapest, 'Switch to [cheapest plan]' text; (c) Consumption Reduction — reduce all values by 10%, calculate new cheapest bill, show saving. Each card: white bg, rounded-2xl, border-l-4 in accent color, icon, title, why, formatINR saving, button. Collapsible section wrapper (open by default) in CalculatorPage.",
+
+    "8. Create src/components/DemoControls.tsx: amber info bar. Props: { onLoadDemo: () => void; onReset: () => void }. Shows 'Demo Mode' label, 'Load Demo Scenario' button (calls onLoadDemo), 'Reset Everything' button (calls onReset with confirm dialog). Style: bg-amber-50 border border-amber-200 text-amber-800, full width below CalculatorPage header.",
+
+    "9. Update src/pages/CalculatorPage.tsx: (a) import BillHistory, SavingsActionCenter, DemoControls; (b) add 'history' to Tab type; (c) add TABS entry { id: 'history', label: '📅 History' }; (d) add DemoControls below header — onLoadDemo calls loadDemoData() then reloads consumption from storage; onReset calls resetAllData() then resets consumption to FALLBACK; (e) pass consumption to RecommendationPanel and onTryScenario callback that calls setConsumption; (f) render SavingsActionCenter below bill cards (collapsible, open by default) with onTryScenario; (g) render BillHistory in the 'history' tab with consumption, breakdowns, cheapestId props; (h) update handleDownloadPDF to pass last 3 bill history entries via reportData.billHistory optional param.",
+
+    "10. Update src/utils/pdfReport.ts: (a) add optional billHistory?: BillHistoryEntry[] to ReportData interface (import BillHistoryEntry from storage); (b) if billHistory exists and length > 0, add 'Recent Bill History' section showing last 3 months as rows (month, total kWh, cheapest plan, bill amount using formatINR); (c) add 'Smart Savings Summary' section with the 3 standard tips (peak shift, plan switch, consumption reduction) as text rows; (d) styled header rectangle using colored rect for a proper banner look (already has this — just ensure it's solid and well-proportioned). Keep existing sections unchanged."
+  ],
+  "acceptance_criteria": [
+    "storage.ts exports loadBillHistory, saveBillHistory, addBillHistoryEntry, loadDemoData with correct signatures",
+    "ConsumptionForm shows Load Demo / Reset buttons and total kWh",
+    "BillCard shows colored top border and annual cost",
+    "RecommendationPanel accepts consumption prop and shows Smart Savings Actions subsection",
+    "WhatIfSimulator has peak shift slider and consumption scale buttons with before/after summary",
+    "BillHistory component renders table + line chart + save/clear actions",
+    "SavingsActionCenter shows 3 rule-based cards with Try This Scenario buttons",
+    "DemoControls renders as amber bar with working Load Demo and Reset buttons",
+    "CalculatorPage has 5 tabs including History, integrates all new components",
+    "PDF report includes optional bill history section",
+    "`npm test` passes all 14 tests",
+    "`npx tsc --noEmit` reports zero errors"
+  ],
+  "verification": [
+    "cd 'c:\\Users\\NAVEEN S\\Desktop\\electicity tariff'; npm test",
+    "cd 'c:\\Users\\NAVEEN S\\Desktop\\electicity tariff'; npx tsc --noEmit"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
